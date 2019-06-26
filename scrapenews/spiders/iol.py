@@ -14,19 +14,25 @@ class IOLSpider(SitemapSpider):
 
     sitemap_urls = ['https://www.iol.co.za/robots.txt']
     sitemap_follow = [
-        '^https://www.iol.co.za/news/((?!eish).)*$',
-        'www.iol.co.za/business-report',
-        'www.iol.co.za/politics',
-        'www.iol.co.za/personal-finance',
+        'www.iol.co.za/sitemap-1.xml',
+        'www.iol.co.za/sitemap-0.xml',
+        'www.iol.co.za/news/sitemap.xml',
+        'www.iol.co.za/politics/sitemap.xml',
+        'www.iol.co.za/business-report/sitemap.xml',
+        'www.iol.co.za/personal-finance/sitemap.xml',
+        'https://www.iol.co.za/sport/sitemap.xml',
+        'https://www.iol.co.za/entertainment/sitemap.xml',
+        'www.iol.co.za/lifestyle/sitemap.xml',
+        'www.iol.co.za/motoring/sitemap.xml',
+        'www.iol.co.za/travel/sitemap.xml',
     ]
 
     publication_name = 'IOL News'
 
     def parse(self, response):
-
         title = response.xpath('//header/h1/text()').extract_first()
         self.logger.info('%s %s', response.url, title)
-        article_body = response.xpath('//div[@itemprop="articleBody"]')
+        article_body = response.css('div.article-widget-text')
         if article_body:
             body_html = article_body.extract_first()
             byline = response.xpath('//span[@itemprop="author"]/strong/text()').extract_first()
